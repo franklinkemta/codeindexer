@@ -2,7 +2,7 @@
 
 [![PyPI version](https://badge.fury.io/py/codeindexer.svg)](https://badge.fury.io/py/codeindexer)
 
-A lightweight CLI to generate LLM context-ready prompt file from a codebase.
+A lightweight CLI tool for indexing codebases to provide context for LLMs.
 
 ## Why ?
 
@@ -18,11 +18,11 @@ pip install codeindexer
 # Basic usage
 codeindexer --index ./my_repo --format md index_file.md
 
-# Filter by file extensions
-codeindexer --index ./my_repo --only .py,.js,.md --format md index_file.md
+# Filter by file extensions (create a txt prompt file index_file.txt)
+codeindexer --index ./my_repo --only .py,.js,.md --format txt index_file.txt
 
-# Skip specific directories or files
-codeindexer --index ./my_repo --skip node_modules/,venv/,*.log --format md index_file.md
+# Skip specific directories or files (create a json prompt file index_file.json)
+codeindexer --index ./my_repo --skip node_modules/,venv/,*.log --format json index_file.json
 
 # Explicitly include files/paths (even if ignored by .gitignore)
 codeindexer --index ./my_repo --include important.log,temp/config.json --format md index_file.md
@@ -32,9 +32,12 @@ codeindexer --index ./my_repo --prompt "Analyze and suggest improvements." --for
 
 # Disable .gitignore parsing
 codeindexer --index ./my_repo --no-gitignore --format md index_file.md
+
+# Split the prompt into multiple parts e.g 1000 lines max (place prompt parts in the index_file/... folder)
+codeindexer --index ./my_repo --format md index_file.md --split 1000
 ````
 
-Example Output prompt (index_file.md) 📋
+Example of indexed output file (index_file.md) 📋
 
 ```tree
 # Repo: my_repo
@@ -75,6 +78,7 @@ Acknowledge the project's description and files, do no provide additional explan
 - `--prompt`: Custom prompt to add at the end of the index
 - `--no-skip-env`: Include .env files (by default they are skipped)
 - `--no-gitignore`: Disable automatic parsing of .gitignore files (enabled by default)
+- `--split`: Split output into chunks with specified max lines per file (default: 1000)
 
 
 ## Features ✨

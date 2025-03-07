@@ -112,3 +112,87 @@ def test_create_index():
         assert data["prompt"] == "Please analyze this code."
     finally:
         os.unlink(json_path)
+
+
+def test_create_index_with_progress():
+    """Test creating an index file with progress callback."""
+    repo_dir = create_test_repo()
+    
+    # Test creating a markdown index with progress
+    with tempfile.NamedTemporaryFile(suffix=".md", delete=False) as md_file:
+        md_path = Path(md_file.name)
+    
+    try:
+        progress_updates = []
+        
+        def mock_progress_callback(status, current, total, message=None):
+            progress_updates.append({
+                "status": status,
+                "current": current,
+                "total": total,
+                "message": message
+            })
+        
+        create_index(
+            index_dir=repo_dir,
+            output_path=md_path,
+            only_extensions=[".py", ".md"],
+            skip_patterns=["node_modules/"],
+            output_format="md",
+            prompt="Please analyze this code.",
+            progress_callback=mock_progress_callback
+        )
+        
+        # Check that progress was reported
+        assert len(progress_updates) > 0
+        assert progress_updates[0]["status"] == "Initializing"
+        assert progress_updates[-1]["status"] == "Completed"
+        assert progress_updates[-1]["current"] == 100
+        
+        content = md_path.read_text()
+        assert f"# Repo: {repo_dir.name}" in content
+    finally:
+        os.unlink(md_path)
+
+
+def test_create_index_with_split():
+    """Test creating an index file with file splitting."""
+    repo_dir = create_test_repo()
+    
+    # Test creating a markdown index with split
+    with tempfile.NamedTemporaryFile(suffix=".md", delete=False) as md_file:
+        md_path = Path(md_file.name)
+    
+    try:
+        split_dir = md_path.parent / f"{md_path.stem}_files"
+        
+        create_index(
+            index_dir=repo_dir,
+            output_path=md_path,
+            only_extensions=[".py", ".md"],
+            skip_patterns=["node_modules/"],
+            output_format="md",
+            prompt="Please analyze this code.",
+            split=True
+        )
+        
+        # Check that split dir was created
+        assert split_dir.exists()
+        assert split_dir.is_dir()
+        
+        # Check that files were split
+        assert (split_dir / "README.md").exists()
+        assert (split_dir / "src" / "main.py").exists()
+        assert (split_dir / "src" / "utils.py").exists()
+        
+        # Check content of main index
+        content = md_path.read_text()
+        assert f"# Repo: {repo_dir.name}" in content
+        assert f"[See file: {md_path.stem}_files/README.md]" in content
+        assert f"[See file: {md_path.stem}_files/src/main.py]" in content
+    finally:
+        os.unlink(md_path)
+        # Clean up split directory
+        if split_dir.exists():
+            import shutil
+            shutil.rmtree(split_dir)

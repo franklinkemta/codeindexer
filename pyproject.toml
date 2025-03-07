@@ -8,7 +8,7 @@ version = "0.1.0"
 authors = [
     {name = "Franklin Kemta", email = "hi@franklinkemta.com"},
 ]
-description = "A lightweight tool for indexing codebases to provide context for LLMs"
+description = "A lightweight CLI to index a codebase and create a context-ready prompt file for LLM."
 readme = "README.md"
 requires-python = ">=3.7"
 classifiers = [

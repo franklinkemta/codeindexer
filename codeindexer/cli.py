@@ -53,10 +53,18 @@ console = Console()
     default=True,
     help="Use .gitignore patterns (default: True)",
 )
+@click.option(
+    "--split",
+    type=int,
+    is_flag=False,
+    flag_value=1000,
+    default=None,
+    help="Split output into chunks with specified max lines per file (default: 1000)",
+)
 @click.argument("output_file", type=click.Path(resolve_path=True))
 def main(
     index, only, skip, include, output_format, prompt, 
-    skip_env, use_gitignore, output_file
+    skip_env, use_gitignore, split, output_file
 ):
     """Generate an index of a codebase for LLM context."""
     try:
@@ -71,7 +79,18 @@ def main(
         if skip_env and ".env" not in skip_patterns:
             skip_patterns.append("*.env")
         
-        with console.status(f"Indexing {index_dir.name}..."):
+        with Progress() as progress:
+            # Create the main task
+            main_task = progress.add_task("[green]Indexing codebase...", total=100)
+            console.log("\n")
+            
+            # Define the progress callback
+            def update_progress(status, current, total, message=None):
+                if total > 0:
+                    progress.update(main_task, completed=int(current / total * 100), description=f"[green]{status}...")
+                if message:
+                    console.log(message)
+            
             create_index(
                 index_dir=index_dir,
                 output_path=output_path,
@@ -81,9 +100,15 @@ def main(
                 output_format=output_format,
                 prompt=prompt,
                 use_gitignore=use_gitignore,
+                split_max_lines=split,
+                progress_callback=update_progress,
             )
         
-        console.print(f"✅ Index created successfully: [bold green]{output_path}[/]")
+        if split:
+            split_dir = output_path.parent / output_path.stem
+            console.print(f"✅ Prompt file parts: [bold green]{split_dir}/[/]")
+        else:
+            console.print(f"✅ Prompt file: [bold green]{output_path}[/]")
     
     except Exception as e:
         console.print(f"[bold red]Error:[/] {str(e)}")
