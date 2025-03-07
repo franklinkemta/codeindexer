@@ -1,8 +1,8 @@
-# Contributing to CodeIndexer
+# Contributing to CodeIndexer 🚀 
 
 First off, thank you for considering contributing to CodeIndexer! It's people like you that make this tool better for everyone.
 
-## Getting Started
+## 📌 Getting Started
 
 1. Fork the repository
 2. Clone your fork: `git clone https://github.com/franklinkemta/codeindexer.git`
@@ -12,7 +12,7 @@ First off, thank you for considering contributing to CodeIndexer! It's people li
    - Unix/MacOS: `source .venv/bin/activate`
 5. Install dependencies: `pip install -e ".[dev]"`
 
-## Development Process
+## ⚡ Development Workflow
 
 1. Create a new branch for your feature: `git checkout -b feature-name`
 2. Make your changes
@@ -23,16 +23,16 @@ First off, thank you for considering contributing to CodeIndexer! It's people li
 7. Push to your fork: `git push origin feature-name`
 8. Submit a pull request
 
-## Pull Request Process
+## ✅ Pull Request Workflow
 
 1. Update the README.md with details of changes if applicable
 2. Update the version number in pyproject.toml if applicable
 3. The PR will be merged once it has been reviewed and approved
 
-## Code of Conduct
+## 🌟 Code of Conduct
 
 Please be respectful and considerate of others when contributing to this project.
 
-## Questions?
+## ❓ Questions?
 
 Feel free to open an issue if you have any questions or need help.

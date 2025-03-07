@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "codeindexer"
 version = "0.1.0"
 authors = [
-    {name = "Franklin Kemta", email = "franklin@franklinkemta.com"},
+    {name = "Franklin Kemta", email = "hi@franklinkemta.com"},
 ]
 description = "A lightweight tool for indexing codebases to provide context for LLMs"
 readme = "README.md"

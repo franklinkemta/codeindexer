@@ -40,7 +40,7 @@ console = Console()
 )
 @click.option(
     "--prompt",
-    default="Acknowledge the given project specs and files, do no provide unnecessary explanation and wait for next instructions",
+    default="Acknowledge the project's description and files, do no provide additional explanation, wait for instructions",
     help="Custom prompt to add at the end of the index",
 )
 @click.option(
