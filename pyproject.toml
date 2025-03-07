@@ -21,6 +21,8 @@ dependencies = [
     "rich>=10.0.0",
 ]
 
+keywords = ["productivity", "open-source", "code", "prompt", "indexing", "gemini", "codebase", "llama", "cursor", "copilot", "copy-paste", "claude", "groq", "llm", "prompt-engineering", "llms", "chatgpt", "deepseek"]
+
 [project.urls]
 "Homepage" = "https://github.com/franklinkemta/codeindexer"
 "Bug Tracker" = "https://github.com/franklinkemta/codeindexer/issues"
