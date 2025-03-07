@@ -107,9 +107,21 @@ def collect_files(
             # Skip directory based on patterns unless explicitly included
             if not should_include:
                 for pattern in skip_patterns:
+                    # Normalize pattern for directory matching
+                    if pattern.endswith('/'):
+                        dir_pattern = pattern
+                        path_pattern = pattern[:-1]
+                    else:
+                        dir_pattern = pattern + '/'
+                        path_pattern = pattern
+                    
+                    # Match against directory name, absolute path, or relative path
                     if (fnmatch(d, pattern) or 
+                        fnmatch(d, path_pattern) or
+                        fnmatch(d + '/', dir_pattern) or 
                         fnmatch(dir_path, pattern) or 
-                        fnmatch(rel_dir_path, pattern)):
+                        fnmatch(rel_dir_path, pattern) or
+                        fnmatch(rel_dir_path + '/', dir_pattern)):
                         dirs_to_remove.append(d)
                         break
         
