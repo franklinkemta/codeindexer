@@ -285,7 +285,7 @@ def create_text_index(
                 content_lines.append(f"[Error reading file: {str(e)}]\n")
         
         # Add separator before prompt
-        if prompt:
+        if prompt and prompt.strip():
             content_lines.append("\n" + "_" * 40 + "\n")
             content_lines.extend(prompt.split('\n'))
         
@@ -383,7 +383,7 @@ def create_text_index(
                     f.write(f"[Error reading file: {str(e)}]\n")
             
             # Add separator before prompt
-            if prompt:
+            if prompt and prompt.strip():
                 f.write("\n" + "_" * 40 + "\n\n")
                 f.write(prompt)
     
@@ -419,7 +419,7 @@ def create_json_index(
         "repo_name": repo_name,
         "folder_structure": tree,
         "files": [],
-        "prompt": prompt
+        "prompt": prompt if prompt and prompt.strip() else ""
     }
     
     total_files = len(files)
@@ -497,6 +497,8 @@ def create_json_index(
                     "folder_structure": tree,
                     "files": index_data["files"][:len(index_data["files"]) // num_chunks]
                 }
+                if prompt and prompt.strip():
+                    chunk_data["prompt"] = prompt
             elif i == num_chunks - 1:
                 chunk_data = {
                     "part": i,
@@ -504,7 +506,7 @@ def create_json_index(
                     "is_first": False,
                     "is_last": True,
                     "files": index_data["files"][i * len(index_data["files"]) // num_chunks:],
-                    "prompt": prompt
+                    "prompt": prompt if prompt and prompt.strip() else ""
                 }
             else:
                 start_idx = i * len(index_data["files"]) // num_chunks
