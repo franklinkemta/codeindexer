@@ -40,8 +40,8 @@ console = Console()
 )
 @click.option(
     "--prompt",
-    default="Acknowledge the project's description and files, do no provide additional explanation, wait for instructions",
-    help="Custom prompt to add at the end of the index",
+    default="",
+    help="(Optional) prompt to append at the end of the index. e.g Acknowledge the project's description and files, do no provide additional explanation, wait for instructions",
 )
 @click.option(
     "--skip-env/--no-skip-env",
